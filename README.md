@@ -2,6 +2,7 @@
 
 자동차 부품사 재직자가 교재 「로봇 밸류체인」 3장을 따라 공개 자료 숫자로 결과 대시보드 한 장을 만들며 "우리 회사는 밸류체인의 어느 고리에 설 것인가"를 판단해 보는 자율학습 강의다. 수업은 Claude Code 스킬 `/learn-robot-vc-hgd`가 진행한다 (Skills as Curriculum). 이 강의는 ahh8801이 course-forge로 직접 만들었다.
 
+- **강의 웹앱 (브라우저에서 바로 수강)**: https://ahh8801.github.io/learn-robot-vc-hgd/app/ — 교재 3장 · 판단형 퀴즈 4문항 · 대시보드 · 우리 회사 워크시트(입력 내용은 내 브라우저에만 저장)
 - **결과 대시보드**: https://ahh8801.github.io/learn-robot-vc-hgd/
 - **교재 PDF**: [docs/Robot_Value_Chain_Textbook.pdf](docs/Robot_Value_Chain_Textbook.pdf) · **강의 덱 PDF**: [docs/Robot_Value_Chain_Deck.pdf](docs/Robot_Value_Chain_Deck.pdf)
 - 처음이면 [GUIDE.md](GUIDE.md)부터. 기본 환경은 Claude 데스크톱 앱(Code 탭). VS Code는 GUIDE 부록 B
@@ -50,6 +51,7 @@ npx skills add ahh8801/learn-robot-vc-hgd --agent claude-code --global --yes 를
 | 날짜 | 바뀐 점 |
 |---|---|
 | 2026-10-31 | 첫 판 — 블록 4개, 퀴즈 4문항 |
+| 2026-11-01 | 강의 웹앱 `app/` 추가 — Claude Code 없이 브라우저에서 수강 |
 
 ## 만든 방법
 

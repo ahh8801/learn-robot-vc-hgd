@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="자동차 부품사 재직자를 위한 로봇 밸류체인 자율학습 웹앱 — 교재 3장, 판단형 퀴즈 4문항, 공개 자료 대시보드">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}</style>
+<title>로봇 밸류체인 강의</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* 레이아웃: 상단 고정 탭(준비·1~3장·대시보드·출처) + 읽기 폭 본문. 블록마다 설명 → 숫자 → 케이스 → 요약 → 질문 → 퀴즈 순서 */
+:root{
+  --bg:#F6F8FB; --surface:#FFFFFF; --panel:#EAF0F8; --line:#D5DCE7;
+  --ink:#1C2333; --muted:#5B6474; --navy:#1B2C5E; --accent:#2E5BAA;
+  --good:#24804F; --good-bg:#E3F3EA; --bad:#B4372F; --bad-bg:#FBE8E6; --warn:#8A5A00; --warn-bg:#FBF0D9;
+  --bar:#2E5BAA; --half:#8C95A5;
+  --f-body:"IBM Plex Sans KR","Malgun Gothic","Apple SD Gothic Neo",sans-serif;
+  --f-data:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#10151F; --surface:#171E2B; --panel:#1E2838; --line:#2E3A4E;
+  --ink:#E6EAF1; --muted:#9AA4B5; --navy:#A9C1EC; --accent:#7FA6EA;
+  --good:#6FCF97; --good-bg:#16302A; --bad:#F08A80; --bad-bg:#3A1F1E; --warn:#E8B85C; --warn-bg:#352A14;
+  --bar:#6F9AE6; --half:#7D879A; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#10151F; --surface:#171E2B; --panel:#1E2838; --line:#2E3A4E;
+  --ink:#E6EAF1; --muted:#9AA4B5; --navy:#A9C1EC; --accent:#7FA6EA;
+  --good:#6FCF97; --good-bg:#16302A; --bad:#F08A80; --bad-bg:#3A1F1E; --warn:#E8B85C; --warn-bg:#352A14;
+  --bar:#6F9AE6; --half:#7D879A; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.65;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+.wrap{max-width:900px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.top{background:var(--surface);border-bottom:1px solid var(--line)}
+header.top .wrap{padding-block:22px 14px}
+.eyebrow{font-size:.78rem;letter-spacing:.06em;color:var(--muted);font-weight:600}
+h1{font-size:1.65rem;line-height:1.3;color:var(--navy);margin:4px 0 6px;text-wrap:balance}
+.lede{margin:0;color:var(--muted);max-width:62ch}
+.progress{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;font-size:.85rem}
+.chip{border:1px solid var(--line);border-radius:999px;padding:2px 10px;color:var(--muted);background:var(--bg)}
+.chip.done{border-color:var(--good);color:var(--good);background:var(--good-bg)}
+nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+nav.tabs .wrap{display:flex;gap:4px;overflow-x:auto;padding-block:6px}
+nav.tabs a{flex:none;text-decoration:none;color:var(--muted);font-weight:600;font-size:.92rem;padding:8px 12px;border-radius:8px}
+nav.tabs a[aria-current="page"]{color:var(--surface);background:var(--navy)}
+nav.tabs a:focus-visible,button:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+main .wrap{padding-block:26px 64px}
+section.view{display:flex;flex-direction:column;gap:22px}
+h2{font-size:1.35rem;color:var(--navy);margin:0;text-wrap:balance}
+h3{font-size:1.05rem;color:var(--accent);margin:0 0 8px}
+p{margin:0;max-width:68ch}
+.q{background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--navy);border-radius:6px;padding:12px 16px}
+.q b{color:var(--navy)}
+.limit{background:var(--warn-bg);color:var(--warn);border-radius:6px;padding:10px 14px;font-size:.93rem}
+.tw{overflow-x:auto;min-width:0}
+table{border-collapse:collapse;width:100%;font-size:.93rem;background:var(--surface)}
+th{background:var(--navy);color:var(--surface);text-align:left;padding:8px 10px;font-weight:600}
+td{border-bottom:1px solid var(--line);padding:8px 10px;vertical-align:top}
+tbody tr:nth-child(even) td{background:var(--panel)}
+.num{font-family:var(--f-data);font-variant-numeric:tabular-nums;white-space:nowrap}
+.src{color:var(--muted);font-size:.85em;white-space:nowrap}
+.tag{display:inline-block;font-size:.78rem;font-weight:600;border-radius:4px;padding:0 6px;margin-left:4px}
+.tag.est{background:var(--warn-bg);color:var(--warn)}
+.tag.goal{background:var(--panel);color:var(--accent)}
+.tag.miss{background:var(--bad-bg);color:var(--bad)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.stat .big{font-family:var(--f-data);font-size:1.45rem;color:var(--navy);font-variant-numeric:tabular-nums}
+.stat .cap{font-size:.85rem;color:var(--muted)}
+.chain{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.link{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:6px}
+.link h4{margin:0;font-size:.95rem;color:var(--navy)}
+.link ul{margin:0;padding-left:18px;font-size:.92rem}
+.link .foot{font-size:.82rem;color:var(--muted);margin-top:auto}
+.link.hi{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.bars{display:flex;flex-direction:column;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:16px}
+.bar-row{display:grid;grid-template-columns:4.5em minmax(0,1fr) 3.2em;align-items:center;gap:10px}
+.track{position:relative;height:28px;background:var(--panel);border-radius:4px}
+.fill{position:absolute;inset:0 auto 0 0;background:var(--bar);border-radius:0 4px 4px 0}
+.halfline{position:absolute;left:50%;top:-5px;bottom:-5px;border-left:2px dashed var(--half)}
+.axis{display:grid;grid-template-columns:4.5em minmax(0,1fr) 3.2em;gap:10px;font-size:.8rem;color:var(--muted)}
+.axis span:nth-child(2){display:flex;justify-content:space-between}
+ol.sum,ol.think{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:6px}
+.quiz{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.quiz .qh{font-size:.8rem;font-weight:700;letter-spacing:.05em;color:var(--accent)}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{font:inherit;text-align:left;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:10px 12px;cursor:pointer}
+.opt:hover:not([disabled]){border-color:var(--accent)}
+.opt[disabled]{cursor:default}
+.opt.right{border-color:var(--good);background:var(--good-bg)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-bg)}
+.opt small{display:block;color:var(--muted)}
+.explain{border-top:1px solid var(--line);padding-top:10px;font-size:.95rem}
+.explain b{color:var(--navy)}
+.btn{font:inherit;font-weight:600;background:var(--navy);color:var(--surface);border:0;border-radius:8px;padding:9px 14px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--accent);border:1px solid var(--line)}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.ws{display:flex;flex-direction:column;gap:12px}
+.ws label{font-weight:600;font-size:.93rem;display:flex;flex-direction:column;gap:6px}
+.ws textarea{font:inherit;font-weight:400;min-height:64px;resize:vertical;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:8px}
+.note{font-size:.88rem;color:var(--muted)}
+ul.srcs{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;font-size:.92rem}
+ul.srcs a{color:var(--accent);word-break:break-all}
+.pdfs{display:flex;flex-wrap:wrap;gap:8px}
+.pdfs a{color:var(--accent);font-weight:600}
+@media (max-width:640px){.chain{grid-template-columns:minmax(0,1fr)} h1{font-size:1.4rem}}
+@media (prefers-reduced-motion:no-preference){.fill{transition:width .6s ease}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="eyebrow">자동차 부품사 재직자 · 자율학습 · 자료 기준일 2026-10-31</div>
+  <h1>로봇 밸류체인 — 자동차 부품사는 어느 고리에서 기회를 잡을 수 있는가</h1>
+  <p class="lede">교재 3장을 블록 4개로 따라가며 공개 자료 숫자를 읽고, 블록마다 판단형 퀴즈 하나를 풉니다. 숫자 옆 [S번호]는 '출처' 탭의 번호입니다.</p>
+  <div class="progress" id="progress" aria-live="polite"></div>
+</div></header>
+
+<nav class="tabs" aria-label="블록"><div class="wrap">
+  <a href="#start" data-view="start">0 준비</a>
+  <a href="#ch1" data-view="ch1">1 밸류체인 지도</a>
+  <a href="#ch2" data-view="ch2">2 핵심 부품</a>
+  <a href="#ch3" data-view="ch3">3 진입 기회</a>
+  <a href="#dashboard" data-view="dashboard">대시보드</a>
+  <a href="#sources" data-view="sources">출처</a>
+</div></nav>
+
+<main><div class="wrap">
+
+<!-- ============ Block 0 ============ -->
+<section class="view" id="v-start">
+  <h2>Block 0 · 준비 — 자료 읽는 법</h2>
+  <div class="q"><b>이 강의의 핵심 질문</b><br>로봇 밸류체인의 어느 고리에서 자동차 부품사가 가진 기술과 생산 역량으로 새 사업 기회를 잡을 수 있는가?</div>
+  <div>
+    <h3>교재와 블록</h3>
+    <div class="tw"><table><thead><tr><th>교재</th><th>이 강의</th></tr></thead><tbody>
+      <tr><td>표지 · 부록(출처 목록)</td><td>Block 0 준비 — 자료 읽는 법</td></tr>
+      <tr><td>1장 로봇 밸류체인 지도</td><td>Block 1</td></tr>
+      <tr><td>2장 핵심 부품과 공급 구도</td><td>Block 2</td></tr>
+      <tr><td>3장 자동차 부품사의 진입 기회</td><td>Block 3</td></tr>
+    </tbody></table></div>
+  </div>
+  <div>
+    <h3>숫자를 읽는 법 — '교차확인' 표시</h3>
+    <p>강의의 숫자는 모두 공개 자료에서 뽑은 23개(facts.csv)입니다. 확인 18개 · 부분 확인 1개 · 단일 출처 2개 · 미확보 2개입니다.</p>
+    <div class="tw"><table><thead><tr><th>표시</th><th>뜻</th><th>쓰는 법</th></tr></thead><tbody>
+      <tr><td>확인</td><td>서로 다른 출처 두 곳 이상에서 같은 숫자를 확인했다</td><td>그대로 쓰고 [S번호]를 붙인다</td></tr>
+      <tr><td>부분 확인 <span class="tag est">추정</span></td><td>출처끼리 숫자가 다르다</td><td>범위로 쓰고 "보도 기준 추정"이라고 밝힌다</td></tr>
+      <tr><td>단일 출처</td><td>한 곳에서만 확인했다</td><td>"회사 발표 기준"처럼 출처의 성격을 밝히거나, 쓰지 않고 보류한다</td></tr>
+      <tr><td>미확보 <span class="tag miss">미확보</span></td><td>공개 자료로 찾지 못했다</td><td>지어내지 않고 '미확보'로 둔다</td></tr>
+    </tbody></table></div>
+  </div>
+  <div>
+    <h3>케이스 — 보도마다 숫자가 다를 때</h3>
+    <p>휴머노이드 원가에서 액추에이터가 차지하는 몫을 한국경제는 "60% 이상으로 알려졌다" <span class="src">[S9]</span>, 아이뉴스24는 "40~60%" <span class="src">[S10]</span>라고 썼습니다. 교재는 두 보도를 합쳐 <b>"40~60%(보도 기준 추정)"</b>로 쓰고 두 출처를 함께 붙였습니다. 숫자 하나를 골라 단정하면 출처끼리 다르다는 사실이 사라집니다.</p>
+  </div>
+  <div class="quiz" data-quiz="q0"></div>
+  <div>
+    <h3>교재 PDF</h3>
+    <div class="pdfs">
+      <a href="https://ahh8801.github.io/learn-robot-vc-hgd/docs/Robot_Value_Chain_Textbook.pdf">교재 PDF</a>
+      <a href="https://ahh8801.github.io/learn-robot-vc-hgd/docs/Robot_Value_Chain_Deck.pdf">강의 덱 PDF</a>
+      <a href="https://github.com/ahh8801/learn-robot-vc-hgd">Claude Code 강의 스킬</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Block 1 ============ -->
+<section class="view" id="v-ch1" hidden>
+  <h2>Block 1 · 로봇 밸류체인 지도</h2>
+  <div class="q"><b>핵심 질문</b><br>로봇 산업은 어떤 고리로 나뉘고, 각 고리에서 돈은 어떻게 버는가?</div>
+  <div>
+    <h3>용어</h3>
+    <div class="tw"><table><thead><tr><th>용어</th><th>뜻</th></tr></thead><tbody>
+      <tr><td>밸류체인(가치사슬)</td><td>원재료·부품에서 완제품, 그리고 고객이 쓰기까지 가치가 더해지는 단계를 차례로 이은 것</td></tr>
+      <tr><td>시스템 통합(SI)</td><td>로봇 한 대를 실제 공정에 맞게 설계·설치·시운전해 "일하는 설비"로 만드는 일</td></tr>
+      <tr><td>신규 설치 대수</td><td>그해 새로 공장에 들어간 산업용 로봇 수. 해마다의 <b>수요</b></td></tr>
+      <tr><td>가동 대수</td><td>지금 공장에서 돌아가고 있는 산업용 로봇 전체 수. 쌓인 <b>설치 기반</b></td></tr>
+      <tr><td>로봇 밀도</td><td>제조업 종사자 1만 명당 산업용 로봇 수</td></tr>
+    </tbody></table></div>
+  </div>
+  <div>
+    <h3>세 고리는 돈 버는 방식이 다르다</h3>
+    <div class="chain">
+      <div class="link hi"><h4>① 부품</h4><ul><li>감속기</li><li>서보모터·액추에이터</li><li>센서·비전</li><li>제어기·소프트웨어</li></ul><div class="foot">대량 납품 · 자동차에 빗대면 1·2차 협력사</div></div>
+      <div class="link"><h4>② 로봇 본체</h4><ul><li>산업용 로봇</li><li>협동 로봇</li><li>서비스 로봇</li><li>휴머노이드</li></ul><div class="foot">완성 로봇 판매, 플랫폼·SW · 완성차 회사</div></div>
+      <div class="link"><h4>③ 도입·운영</h4><ul><li>시스템 통합(SI)</li><li>운영·유지보수</li><li>서비스형 로봇(RaaS)</li></ul><div class="foot">프로젝트 수주, 유지보수 계약, 월 사용료 · 딜러·정비·리스</div></div>
+    </div>
+  </div>
+  <div>
+    <h3>세계 시장</h3>
+    <div class="stats" id="ch1-stats"></div>
+  </div>
+  <div>
+    <h3>국내 매출 구조 (2024)</h3>
+    <div class="tw"><table id="ch1-dom"></table></div>
+    <p class="note" style="margin-top:6px">세 부문을 더하면 전체 매출과 정확히 같습니다. 부품 고리가 이미 국내 시장의 큰 덩어리입니다.</p>
+  </div>
+  <div>
+    <h3>케이스 — 로봇을 가장 촘촘히 쓰는 나라, 한국</h3>
+    <p>한국은 제조업 종사자 1만 명당 로봇 <span class="num">1,220</span>대로 로봇 밀도 세계 1위입니다 <span class="src">[S2][S3]</span>. IFR은 그 배경으로 산업용 로봇을 많이 사는 <b>전자 산업과 자동차 산업</b>을 꼽습니다 <span class="src">[S2]</span>. 자동차 부품사는 이미 로봇의 큰 고객이지만, 2024년 한국 신규 설치는 <span class="num">30,600</span>대 <span class="src">[S1][S6]</span>로 중국 <span class="num">295,000</span>대 <span class="src">[S1][S2]</span>에 비하면 작은 시장이고 핵심 부품 국산화율은 절반에 못 미칩니다 <span class="src">[S7][S8]</span>. "가장 많이 쓰는 나라"가 "부품을 만드는 나라"가 될 수 있는지가 이 강의 전체의 질문입니다.</p>
+  </div>
+  <div><h3>요약 3줄</h3><ol class="sum">
+    <li>로봇 산업은 <b>부품 → 로봇 본체 → 도입·운영</b>의 세 고리로 나뉘고, 고리마다 경쟁력과 돈 버는 방식이 다르다.</li>
+    <li>2024년 세계 산업용 로봇 신규 설치는 542,000대, 그중 중국이 54%를 차지했다 <span class="src">[S1][S2][S6]</span>.</li>
+    <li>한국은 로봇 밀도 세계 1위(1만 명당 1,220대)이고, 국내 로봇산업 매출 6조1,695억 원 가운데 부품·소프트웨어가 32.1%다 <span class="src">[S2][S3][S4][S5]</span>.</li>
+  </ol></div>
+  <div><h3>생각해 볼 질문</h3><ol class="think">
+    <li>우리 회사 공장에서 쓰는 로봇을 떠올려 보세요. 고장이 가장 잦거나 교체 비용이 가장 큰 부분은 어느 고리에 있나요?</li>
+    <li>세 고리 가운데 우리 회사의 지금 사업 방식(대량 납품, 프로젝트 수주, 유지보수 계약)과 가장 닮은 고리는 어디인가요?</li>
+    <li>신규 설치 대수와 가동 대수 가운데, 부품 회사에 더 중요한 숫자는 어느 쪽일까요? 교체 부품 수요까지 생각해 보세요.</li>
+  </ol></div>
+  <div class="quiz" data-quiz="q1"></div>
+</section>
+
+<!-- ============ Block 2 ============ -->
+<section class="view" id="v-ch2" hidden>
+  <h2>Block 2 · 핵심 부품과 공급 구도</h2>
+  <div class="q"><b>핵심 질문</b><br>로봇 원가에서 비중이 큰 부품은 무엇이고, 누가 공급하는가?</div>
+  <div class="limit">자료 한계: 산업용 로봇의 부품별 원가 비중과 감속기 업체별 세계 점유율은 공개 원자료를 찾지 못해 미확보입니다. 원가 비중은 휴머노이드에 대한 보도 기준 추정만 씁니다.</div>
+  <div>
+    <h3>로봇 관절을 이루는 네 부품</h3>
+    <div class="tw"><table><thead><tr><th>부품</th><th>하는 일</th><th>자동차 부품과 닮은 점</th></tr></thead><tbody>
+      <tr><td>감속기</td><td>모터의 빠른 회전을 느리고 힘센 회전으로 바꾼다. 관절이 얼마나 정확하게 멈추는지를 정한다</td><td>변속기·조향 기어의 정밀 기어 가공, 열처리</td></tr>
+      <tr><td>서보모터·액추에이터</td><td>관절을 실제로 움직인다. 액추에이터는 모터 + 감속기 + 센서 + 구동 회로를 묶은 관절 모듈</td><td>전동 조향(EPS)·전동 브레이크의 모터와 구동 회로</td></tr>
+      <tr><td>센서·비전</td><td>힘, 위치, 주변 환경을 읽는다</td><td>차량 카메라, 레이더, 토크 센서</td></tr>
+      <tr><td>제어기·소프트웨어</td><td>여러 관절을 한꺼번에 계산해 움직인다</td><td>차량 전자제어장치(ECU)와 제어 소프트웨어</td></tr>
+    </tbody></table></div>
+  </div>
+  <div>
+    <h3>원가 — 무엇이 비싼가</h3>
+    <div class="tw"><table id="ch2-cost"></table></div>
+  </div>
+  <div>
+    <h3>국산화율 — 어디가 비어 있나</h3>
+    <div class="bars" id="ch2-bars" role="img" aria-label="로봇 핵심 부품 국산화율 막대 차트"></div>
+    <p class="note" style="margin-top:6px">단위 %, 2022년 기준 <span class="src">[S7][S8]</span> · 점선은 절반(50%). 공개 자료 가운데 가장 최근 값이 2022년 기준이라 지금은 달라졌을 수 있습니다.</p>
+  </div>
+  <div>
+    <h3>공급 구도를 읽는 세 가지 질문</h3>
+    <p>Nabtesco는 자사 소개에서 산업용 로봇 감속기 세계 시장을 선도한다고 밝힙니다 <span class="src">[S11]</span>. 회사 스스로의 설명이고, 업체별 점유율은 자료끼리 숫자가 맞지 않아 미확보입니다.</p>
+    <ul style="margin:8px 0 0;padding-left:20px">
+      <li><b>누가 이미 납품하나</b> — 상위 로봇 회사와 오래 거래한 공급사는 바꾸기 어렵다.</li>
+      <li><b>어느 로봇인가</b> — 무거운 산업용 로봇과 가벼운 휴머노이드는 쓰는 감속기와 액추에이터가 다르다.</li>
+      <li><b>새 수요는 어디서 오나</b> — 휴머노이드 공급 구도는 미확보. 자동차 부품사의 신규 진출 사례가 이쪽에 모여 있다.</li>
+    </ul>
+  </div>
+  <div>
+    <h3>케이스 — 감속기, 국산화율이 가장 낮은 부품</h3>
+    <div class="tw"><table><thead><tr><th>어려움</th><th>내용</th><th>자동차 부품사의 기술</th></tr></thead><tbody>
+      <tr><td>정밀도</td><td>정해진 위치에 정확히 멈추려면 기어 사이 틈(백래시)을 아주 작게 유지해야 한다</td><td>정밀 기어 가공</td></tr>
+      <tr><td>수명</td><td>하루 종일 같은 동작을 반복해도 틈이 커지지 않아야 한다</td><td>열처리</td></tr>
+      <tr><td>양산 품질</td><td>시제품 몇 개가 아니라 수만 개를 같은 품질로 만들어야 한다</td><td>양산 품질 관리</td></tr>
+    </tbody></table></div>
+    <p class="note" style="margin-top:6px">로봇 감속기가 요구하는 정밀도와 수명 기준은 차량 부품과 다를 수 있으므로, 같은 기술을 그대로 옮길 수 있는지는 시제품으로 확인해야 합니다.</p>
+  </div>
+  <div><h3>요약 3줄</h3><ol class="sum">
+    <li>로봇 관절은 감속기·모터·센서·제어기로 이루어지고, 이를 묶은 액추에이터가 휴머노이드 원가의 40~60%를 차지한다는 보도가 있다(추정) <span class="src">[S9][S10]</span>.</li>
+    <li>네 핵심 부품의 국산화율은 모두 절반에 못 미치며, 감속기가 35.8%로 가장 낮다(2022년 기준) <span class="src">[S7][S8]</span>.</li>
+    <li>산업용 로봇 원가 비중과 업체별 점유율은 공개 자료로 확인되지 않아, 숫자 대신 "누가 납품하나, 어느 로봇인가, 새 수요는 어디인가"로 공급 구도를 읽는다.</li>
+  </ol></div>
+  <div><h3>생각해 볼 질문</h3><ol class="think">
+    <li>네 부품 가운데 우리 회사 설비로 시제품을 바로 만들어 볼 수 있는 부품은 무엇인가요?</li>
+    <li>국산화율이 낮다는 것은 기회일까요, 진입 장벽이 높다는 신호일까요? 두 쪽 근거를 하나씩 적어 보세요.</li>
+    <li>원가 비중 숫자가 보도마다 다를 때(40~60% vs 60% 이상 <span class="src">[S9][S10]</span>), 사업 계획서에는 어떤 값을 쓰고 어떻게 표시하는 것이 좋을까요?</li>
+  </ol></div>
+  <div class="quiz" data-quiz="q2"></div>
+</section>
+
+<!-- ============ Block 3 ============ -->
+<section class="view" id="v-ch3" hidden>
+  <h2>Block 3 · 자동차 부품사의 진입 기회</h2>
+  <div class="q"><b>핵심 질문</b><br>우리 회사의 역량은 밸류체인의 어느 고리와 맞고, 어떻게 들어갈 수 있는가?</div>
+  <div>
+    <h3>용어</h3>
+    <div class="tw"><table><thead><tr><th>용어</th><th>뜻</th></tr></thead><tbody>
+      <tr><td>역량 매칭</td><td>우리 회사가 이미 가진 기술·설비·고객을 새 시장의 요구와 하나씩 짝지어 보는 일</td></tr>
+      <tr><td>우선 공급사</td><td>고객이 같은 부품을 살 때 먼저 주문을 주기로 약속한 공급사</td></tr>
+      <tr><td>서비스형 로봇(RaaS)</td><td>로봇을 사지 않고 쓰는 만큼 사용료를 내는 방식</td></tr>
+      <tr><td>진입 방식</td><td>납품(부품을 만들어 판다) · 합작(로봇 회사와 함께 만든다) · 인수(기술을 가진 회사를 산다)</td></tr>
+    </tbody></table></div>
+  </div>
+  <div>
+    <h3>수요는 어디서 오나</h3>
+    <div class="stats" id="ch3-stats"></div>
+    <p class="note" style="margin-top:6px">로봇을 만드는 공장이 생기면 관절·센서를 대는 부품 공급망도 함께 필요해집니다. 액추에이터는 자동차의 전자식 조향 장치와 구성이 비슷하다는 설명이 있습니다 <span class="src">[S9]</span>.</p>
+  </div>
+  <div>
+    <h3>먼저 들어간 회사들</h3>
+    <div class="tw"><table id="ch3-comp"></table></div>
+    <p class="note" style="margin-top:6px">네 회사 모두 로봇 본체가 아니라 부품 고리를 골랐습니다.</p>
+  </div>
+  <div>
+    <h3>역량 매칭표</h3>
+    <div class="tw"><table><thead><tr><th>자동차 부품사가 가진 것</th><th>로봇에서 쓰이는 곳</th><th>고리</th></tr></thead><tbody>
+      <tr><td>정밀 기어 가공, 열처리</td><td>감속기</td><td>① 부품</td></tr>
+      <tr><td>전동 조향·제동용 모터와 구동 회로</td><td>서보모터, 액추에이터</td><td>① 부품</td></tr>
+      <tr><td>차량 카메라, 레이더, 토크 센서</td><td>센서·비전</td><td>① 부품</td></tr>
+      <tr><td>차량 제어기(ECU)와 제어 소프트웨어</td><td>관절 제어기</td><td>① 부품</td></tr>
+      <tr><td>양산 품질 체계, 원가 관리</td><td>모든 부품의 대량 공급</td><td>① 부품</td></tr>
+      <tr><td>자동화 라인 운영 경험</td><td>로봇 도입 컨설팅, 유지보수</td><td>③ 도입·운영</td></tr>
+    </tbody></table></div>
+  </div>
+  <div>
+    <h3>진입 방식</h3>
+    <div class="tw"><table><thead><tr><th>방식</th><th>장점</th><th>부담</th><th>어울리는 경우</th></tr></thead><tbody>
+      <tr><td>납품</td><td>지금 사업 방식과 같다. 투자가 작다</td><td>고객 로봇 회사에 기대게 된다</td><td>이미 만드는 부품과 기술이 가까울 때</td></tr>
+      <tr><td>합작</td><td>로봇 회사의 설계와 우리 양산 능력을 합친다</td><td>기술·이익을 나눠야 한다</td><td>로봇 회사가 양산 파트너를 찾을 때</td></tr>
+      <tr><td>인수</td><td>없는 기술을 빨리 얻는다</td><td>큰 돈이 들고 통합이 어렵다</td><td>부족한 기술이 분명하고 자금이 있을 때</td></tr>
+    </tbody></table></div>
+  </div>
+  <div>
+    <h3>케이스 — Schaeffler, 공급사이면서 고객이 되다</h3>
+    <p>독일 자동차 부품사 Schaeffler는 휴머노이드 회사 Humanoid와 두 방향 계약을 맺었습니다 <span class="src">[S14]</span>. 공급사로서 바퀴형 휴머노이드의 관절 액추에이터 수요의 <span class="num">50%</span> 넘게를 2031년까지 공급하는 우선 공급사가 되고, 고객으로서 그 로봇을 서비스형(RaaS)으로 자기 공장에 들여와 실제 생산에 씁니다 <span class="src">[S14]</span>. 우리 공장이 첫 시험장이 될 수 있고, 공급과 수요를 한 계약으로 묶으면 협상력이 생깁니다. <span class="tag goal">회사 발표 기준</span></p>
+  </div>
+  <div>
+    <h3>우리 회사 워크시트</h3>
+    <p class="note">사내 자료로 채우는 칸입니다. 입력한 내용은 <b>이 브라우저에만</b> 저장되고, 다른 사람에게 보이거나 서버로 가지 않습니다.</p>
+    <div class="ws" id="ws"></div>
+    <div class="row"><button class="btn" type="button" id="ws-copy">워크시트 복사</button><button class="btn ghost" type="button" id="ws-clear">비우기</button><span class="note" id="ws-msg" aria-live="polite"></span></div>
+  </div>
+  <div><h3>요약 3줄</h3><ol class="sum">
+    <li>먼저 로봇에 들어간 자동차 부품사(현대모비스, HL만도, LG이노텍, Schaeffler)는 모두 본체가 아니라 <b>부품 고리</b>, 특히 액추에이터와 비전을 골랐다 <span class="src">[S9][S10][S14][S15]</span>.</li>
+    <li>현대차그룹의 미국 로봇 공장(연 30,000대, 2028년 가동 목표)처럼 가까운 곳에서 새 수요가 생기고 있다 <span class="src">[S9][S13]</span>.</li>
+    <li>진입은 역량 매칭표로 고리를 고르고, 납품·합작·인수 가운데 방식을 정하는 두 단계로 생각한다. 우리 회사 칸은 사내 자료로 채운다.</li>
+  </ol></div>
+  <div><h3>생각해 볼 질문</h3><ol class="think">
+    <li>역량 매칭표의 여섯 줄 가운데 우리 회사가 가장 자신 있는 한 줄은 무엇인가요? 그 줄이 가리키는 로봇 부품은 무엇인가요?</li>
+    <li>Schaeffler처럼 우리 공장을 로봇의 첫 시험장으로 내놓는다면, 어느 공정이 가장 알맞을까요?</li>
+    <li>HL만도의 2035년 목표(매출 2조3,000억 원, 점유율 10% <span class="src">[S10][S12]</span>)를 보고, 우리 회사가 비슷한 목표를 세운다면 무엇을 먼저 확인해야 할까요?</li>
+  </ol></div>
+  <div class="quiz" data-quiz="q3"></div>
+</section>
+
+<!-- ============ Dashboard ============ -->
+<section class="view" id="v-dashboard" hidden>
+  <h2>결과 대시보드 — 세 장의 숫자 한 장에</h2>
+  <div class="q">부품 고리는 국내 로봇 매출의 <span class="num">32.1%</span>다 <span class="src">[S4][S5]</span>. 핵심 부품 국산화율은 모두 절반 미만이고 <span class="src">[S7][S8]</span>, 먼저 들어간 자동차 부품사는 액추에이터와 비전을 골랐다 <span class="src">[S9][S10][S14][S15]</span>.</div>
+  <div><h3>1장 · 세계 시장과 국내 매출</h3><div class="stats" id="d-stats1"></div></div>
+  <div class="tw"><table id="d-dom"></table></div>
+  <div><h3>2장 · 국산화율 (2022년 기준)</h3><div class="bars" id="d-bars" role="img" aria-label="국산화율 막대 차트"></div></div>
+  <div class="tw"><table id="d-cost"></table></div>
+  <div><h3>3장 · 수요와 진출 사례</h3><div class="stats" id="d-stats3"></div></div>
+  <div class="tw"><table id="d-comp"></table></div>
+</section>
+
+<!-- ============ Sources ============ -->
+<section class="view" id="v-sources" hidden>
+  <h2>출처</h2>
+  <p>공개 자료만 썼고 최근 2년 자료를 먼저 썼습니다. 신뢰도: 높음 = 공식 기관·회사 원문, 중간 = 주요 언론·증권사가 원자료를 인용한 기사.</p>
+  <ul class="srcs" id="srcs"></ul>
+  <div><h3>미확보</h3><ul style="margin:0;padding-left:20px">
+    <li>산업용 로봇의 부품별 원가 비중 — 원자료를 갖춘 공개 자료 없음</li>
+    <li>감속기 업체별 세계 점유율 — 자료끼리 숫자가 맞지 않음</li>
+    <li>자사 역량·설비 데이터 — 사내 자료 필요</li>
+  </ul></div>
+</section>
+
+</div></main>
+
+<script>
+// ---- 숫자 (교재 facts.csv 와 같은 값) -----------------------------------------
+const STATS1 = [
+  {big:"542,000대", cap:"2024년 세계 산업용 로봇 신규 설치", src:"[S1][S6]"},
+  {big:"4,664,000대", cap:"2024년 세계 가동 대수 · 전년 대비 9% 증가", src:"[S1][S6]"},
+  {big:"575,000대", cap:"2025년 신규 설치", tag:["est","전망"], src:"[S1][S6]"},
+  {big:"54%", cap:"2024년 설치 중 중국 비중 · 295,000대", src:"[S1][S2]"},
+];
+const DOM = [["제조업용 로봇","3조1,075억 원"],["서비스용 로봇","1조810억 원"],["로봇 부품·소프트웨어","1조9,810억 원 (32.1%)"],["합계","6조1,695억 원 (전년 대비 3.2% 증가)"]];
+const LOC = [["감속기",35.8],["모터",38.8],["센서",42.5],["제어기",47.9]];
+const COST = [
+  ["휴머노이드 원가 중 액추에이터","40~60%",'<span class="tag est">보도 기준 추정</span> <span class="src">[S9][S10]</span>'],
+  ["산업용 로봇 부품별 원가 비중","—",'<span class="tag miss">미확보</span>'],
+  ["감속기 업체별 세계 점유율","—",'<span class="tag miss">미확보</span>'],
+];
+const STATS3 = [
+  {big:"연 30,000대", cap:"현대차그룹 미국 로봇 공장 생산능력", src:"[S9][S13]"},
+  {big:"2028년", cap:"가동 목표", src:"[S13]"},
+];
+const COMP = [
+  ["현대모비스","액추에이터","2025년 8월 CEO 인베스터 데이에서 휴머노이드 관절 사업 계획 공개","회사 목표 숫자는 공개되지 않음","[S9][S10]"],
+  ["HL만도","액추에이터","2025년 12월 CEO Investor Day에서 휴머노이드 액추에이터 목표 발표",'2035년 매출 2조3,000억 원, 점유율 10% <span class="tag goal">회사 목표</span>',"[S10][S12]"],
+  ["LG이노텍","센서·비전","보스턴다이내믹스와 비전 센싱 시스템(카메라·3D 센싱 모듈) 공동 개발 협약","—","[S15]"],
+  ["Schaeffler(독일)","액추에이터 + 수요처","Humanoid의 관절 액추에이터 우선 공급사, 그 로봇을 자기 공장에 들여옴",'관절 액추에이터 수요의 50% 초과, 2031년까지 <span class="tag goal">회사 발표 기준</span>',"[S14]"],
+];
+const SOURCES = [
+  ["S1","Global Robot Demand in Factories Doubles Over 10 Years (World Robotics 2025 – Industrial Robots)","국제로봇연맹(IFR)","2025-09-25","높음","https://ifr.org/ifr-press-releases/news/global-robot-demand-in-factories-doubles-over-10-years"],
+  ["S2","Roboterdichte steigt in Europa, Asien und Amerika (로봇 밀도 보도자료, 독일어)","국제로봇연맹(IFR)","2026-04-08","높음","https://ifr.org/downloads/press_docs/DE-2026-APRIL-_8-IFR_PRESSMELDUNG_Roboterdichte-deutsch.pdf"],
+  ["S3","로봇 산업 소개 (출처 표기: 한국로봇산업협회 2024년 기준 실태조사, IFR World Robotics 2025)","KOTRA Invest KOREA","미표기","중간","https://www.investkorea.org/ik-kr/cntnts/i-3021/web.do"],
+  ["S4","국내 로봇시장 6조1695억원…전년比 3.2% 성장","지디넷코리아","2025-12-29","중간","https://zdnet.co.kr/view/?no=20251229084702"],
+  ["S5","[Cover Story] '2024년 국내 로봇산업 실태 조사 결과 보고서' 요약","로봇신문","2026-01-25","중간","https://www.irobotnews.com/news/articleView.html?idxno=44544"],
+  ["S6","IFR: Industrial robot deployments have doubled in 10 years","The Robot Report","2025-09-25","중간","https://www.therobotreport.com/ifr-industrial-robot-deployments-have-doubled-in-10-years/"],
+  ["S7","2035년 '경차값 휴머노이드' 나온다…핵심부품 국산화 서둘러야","머니투데이 (국산화율은 정부 자료 인용)","2025-01-01","중간","https://www.mt.co.kr/tech/2025/01/01/2024120513043058658"],
+  ["S8","[그래픽뉴스] '로봇 밀도 1위' 한국, 핵심 부품 내재화는 여전히 과제","산업일보 (국회미래연구원 토론 자료 인용)","2025-10-16","중간","https://kidd.co.kr/news/243514"],
+  ["S9","현대모비스 '휴머노이드 관절' 만든다","한국경제","2025-08-27","중간","https://www.hankyung.com/article/2025082758141"],
+  ["S10","현대모비스·HL만도, 車부품 넘어 로봇 기업으로 변신 가속","아이뉴스24","2025-12-17","중간","https://v.daum.net/v/20251217075605855"],
+  ["S11","Robotics – Industries (회사 소개 페이지)","Nabtesco","미표기","높음","https://www.nabtesco.de/en/industries/robotics"],
+  ["S12","KB증권 \"HL만도, 폭발적 휴머노이드 엑추에이터 수요 확인...목표가 86%↑\"","파이낸셜뉴스 (KB증권 리포트 인용)","2026-01-14","중간","https://www.fnnews.com/news/202601140900491769"],
+  ["S13","Hyundai Motor to launch world's first large-scale robot factory in 2028","헤럴드경제 (The Herald Business)","2026-08-26","중간","https://mbiz.heraldcorp.com/article/10853081"],
+  ["S14","Humanoid Secures Landmark Deal with Schaeffler to Deploy Thousands of Humanoid Robots","Humanoid (회사 보도자료)","2026-05-13","높음","https://thehumanoid.ai/humanoid-secures-landmark-deal-with-schaeffler-to-deploy-thousands-of-humanoid-robots/"],
+  ["S15","LG이노텍, 휴머노이드 '눈' 만든다","한국경제","2025-05-12","중간","https://www.hankyung.com/article/202505127097i"],
+];
+
+// ---- 퀴즈 (강의 스킬의 판단형 문항과 같은 내용) ---------------------------------
+const QUIZ = {
+  q0:{h:"QUIZ 0 · 자료 표기",q:"팀장이 사업 계획서에 '휴머노이드 원가의 60%가 액추에이터'라고 쓰자고 한다. 한 보도는 '60% 이상으로 알려졌다'[S9], 다른 보도는 '40~60%'[S10]라고 썼고, 교재 자료에는 '부분 확인'으로 표시돼 있다. 계획서에는 어떻게 쓰는 것이 맞을까?",
+    o:[["60%로 쓴다","두 보도 모두 60%를 언급하니 그 값으로 단정한다"],["40~60%(보도 기준 추정)로 쓰고 [S9][S10]을 붙인다","범위와 추정 표시, 두 출처를 함께 적는다"],["두 값의 가운데인 50%로 쓴다","평균을 내서 숫자 하나로 정리한다"]],a:1,
+    e:"출처끼리 숫자가 다른 '부분 확인' 숫자는 범위로 쓰고 \"보도 기준 추정\"이라고 밝힌 뒤 두 출처를 함께 붙인다. 교재가 이 숫자를 쓴 방식 그대로다. 60%로 단정하면 출처끼리 다르다는 사실이 사라져 읽는 사람이 확정값으로 오해한다. 50%는 어느 출처에도 없는 숫자를 새로 만든 것이라 계산처럼 보여도 지어낸 숫자다."},
+  q1:{h:"QUIZ 1 · 신규 설치와 가동 대수",q:"우리 회사가 로봇용 교체 부품(유지보수 부품) 사업을 검토한다. 2024년 세계 산업용 로봇 신규 설치는 542,000대, 가동 대수는 4,664,000대다[S1][S6]. 교체 부품 수요의 크기를 가늠할 때 먼저 볼 숫자는?",
+    o:[["신규 설치 542,000대","해마다 새로 들어가는 로봇 수"],["가동 대수 4,664,000대","지금 공장에서 돌아가는 로봇 전체 수"],["2025년 신규 설치 전망 575,000대","가장 최근 연도의 숫자"]],a:1,
+    e:"교체 부품은 이미 공장에서 돌아가는 로봇에서 나오므로 쌓인 설치 기반인 가동 대수가 먼저다. 신규 설치는 해마다의 새 로봇 수요라 새 로봇에 들어가는 부품을 팔 때 맞는 잣대다. 575,000대는 실적이 아니라 전망이고, 역시 신규 설치 숫자다. 신규 부품 납품이면 신규 설치, 유지보수·교체 부품이면 가동 대수부터 본다."},
+  q2:{h:"QUIZ 2 · 국산화율 읽기",q:"감속기 국산화율은 35.8%로 네 핵심 부품 중 가장 낮다(2022년 기준)[S7][S8]. 임원이 '국산화율이 낮으니 무조건 기회다, 바로 투자하자'고 한다. 교재 기준으로 가장 맞는 판단은?",
+    o:[["맞다 — 빈 시장이니 바로 투자한다","낮은 국산화율 = 채울 수요"],["틀렸다 — 낮으니 들어가지 않는다","낮은 국산화율 = 실패한 시장"],["기회이면서 장벽의 신호다 — 정밀도·수명·양산 품질을 시제품으로 확인한 뒤 판단한다","두 해석을 모두 확인한다"]],a:2,
+    e:"국산화율이 낮다는 것은 국내에서 채우지 못한 수요가 있다는 뜻이기도 하지만, 그만큼 만들기 어렵다는 신호이기도 하다. 교재는 감속기가 어려운 이유로 정밀도·수명·양산 품질을 꼽고, 차량 부품 기술이 그대로 통하는지는 시제품으로 확인해야 한다고 했다. 첫 보기는 장벽 신호를, 둘째 보기는 비어 있는 수요를 무시했다. 이 값은 2022년 기준이라 지금은 달라졌을 수 있다는 점도 함께 확인한다."},
+  q3:{h:"QUIZ 3 · 남의 목표 읽기",q:"HL만도는 휴머노이드 액추에이터로 2035년 매출 2조3,000억 원, 점유율 10%를 목표로 발표했다[S10][S12]. 우리 회사도 비슷한 목표를 세우자는 의견이 나왔다. 가장 먼저 할 일은?",
+    o:[["회사 목표임을 표시하고, 역량 매칭표로 우리 역량이 어느 고리와 맞는지부터 확인한다","목표의 성격과 우리 역량을 먼저 본다"],["HL만도처럼 점유율 10%를 우리 목표로 그대로 쓴다","앞선 회사의 숫자를 기준으로 삼는다"],["2조3,000억 원을 시장 실적으로 보고 그 크기로 우리 매출 목표를 계산한다","발표 숫자를 시장 크기로 본다"]],a:0,
+    e:"HL만도의 숫자는 실적이 아니라 회사가 발표한 목표다. 남의 목표를 기준으로 삼기 전에 우리 기술·설비·고객이 어느 고리와 맞는지(역량 매칭표)와 들어갈 방식(납품·합작·인수)을 먼저 정해야 한다. 둘째 보기는 역량이 다른 회사의 목표를 그대로 옮겼고, 셋째 보기는 목표를 실적이나 시장 크기로 잘못 읽었다. 사업 계획서에 이런 숫자를 옮길 때는 반드시 \"목표\"라고 표시한다."},
+};
+const WS = ["우리가 가진 기술 가운데 역량 매칭표와 겹치는 것은?","그 기술로 시제품을 만들 수 있는 설비가 있나?","지금 고객 가운데 로봇을 만들거나 크게 도입하는 곳은?","고를 고리 (부품 / 본체 / 도입·운영)","고를 방식 (납품 / 합작 / 인수)"];
+
+// ---- 저장 (이 브라우저에만) --------------------------------------------------
+const KEY = "robot-vc-course-v1";
+function load(){ try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch(e){ return {}; } }
+function save(s){ try { localStorage.setItem(KEY, JSON.stringify(s)); } catch(e){} }
+let state = Object.assign({quiz:{}, ws:{}}, load());
+
+// ---- 그리기 ----------------------------------------------------------------
+const $ = s => document.querySelector(s);
+const esc = t => String(t).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function stats(el, list){
+  el.innerHTML = list.map(s => `<div class="stat"><span class="big">${s.big}</span><span class="cap">${s.cap}${s.tag?` <span class="tag ${s.tag[0]}">${s.tag[1]}</span>`:""} <span class="src">${s.src}</span></span></div>`).join("");
+}
+function table(el, head, rows){
+  el.innerHTML = `<thead><tr>${head.map(h=>`<th>${h}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")}</tbody>`;
+}
+function bars(el){
+  el.innerHTML = LOC.map(([n,v]) => `<div class="bar-row"><span>${n}</span><span class="track"><span class="fill" style="width:${v}%"></span><span class="halfline"></span></span><span class="num">${v.toFixed(1)}</span></div>`).join("")
+    + `<div class="axis"><span></span><span><span>0</span><span>50</span><span>100</span></span><span></span></div>`;
+}
+const domRows = DOM.map(([a,b]) => [a, `<span class="num">${b}</span>`, '<span class="src">[S4][S5]</span>']);
+const costRows = COST.map(([a,b,c]) => [a, `<span class="num">${b}</span>`, c]);
+const compRows = COMP.map(r => [r[0], r[1], r[2], r[3], `<span class="src">${r[4]}</span>`]);
+stats($("#ch1-stats"), STATS1); stats($("#d-stats1"), STATS1);
+table($("#ch1-dom"), ["부문","매출 (2024)","출처"], domRows); table($("#d-dom"), ["부문","매출 (2024)","출처"], domRows);
+bars($("#ch2-bars")); bars($("#d-bars"));
+table($("#ch2-cost"), ["무엇을 보나","값","표기"], costRows); table($("#d-cost"), ["무엇을 보나","값","표기"], costRows);
+stats($("#ch3-stats"), STATS3); stats($("#d-stats3"), STATS3);
+table($("#ch3-comp"), ["회사","고리","내용","숫자","출처"], compRows); table($("#d-comp"), ["회사","고리","내용","숫자","출처"], compRows);
+$("#srcs").innerHTML = SOURCES.map(s => `<li><b>${s[0]}</b> ${esc(s[1])} · ${esc(s[2])} · ${s[3]} · 신뢰도 ${s[4]}<br><a href="${s[5]}">${esc(s[5])}</a></li>`).join("");
+
+// ---- 퀴즈 ------------------------------------------------------------------
+function renderQuiz(box){
+  const id = box.dataset.quiz, Q = QUIZ[id], picked = state.quiz[id];
+  box.innerHTML = `<div class="qh">${Q.h}</div><div>${esc(Q.q)}</div><div class="opts">${Q.o.map((o,i)=>{
+      let cls = ""; if (picked !== undefined){ if (i === Q.a) cls = "right"; else if (i === picked) cls = "wrong"; }
+      return `<button class="opt ${cls}" type="button" data-i="${i}" ${picked!==undefined?"disabled":""}>${i+1}. ${esc(o[0])}<small>${esc(o[1])}</small></button>`;
+    }).join("")}</div>${picked!==undefined?`<div class="explain"><b>${picked===Q.a?"정답입니다.":"오답입니다. 정답은 "+(Q.a+1)+"번입니다."}</b> ${esc(Q.e)}</div><div class="row"><button class="btn ghost" type="button" data-retry>다시 풀기</button></div>`:""}`;
+  box.querySelectorAll(".opt").forEach(b => b.addEventListener("click", () => { state.quiz[id] = +b.dataset.i; save(state); renderQuiz(box); progress(); }));
+  const r = box.querySelector("[data-retry]"); if (r) r.addEventListener("click", () => { delete state.quiz[id]; save(state); renderQuiz(box); progress(); });
+}
+document.querySelectorAll("[data-quiz]").forEach(renderQuiz);
+
+// ---- 워크시트 ----------------------------------------------------------------
+$("#ws").innerHTML = WS.map((q,i) => `<label for="ws-${i}">${i+1}. ${q}<textarea id="ws-${i}">${esc(state.ws[i]||"")}</textarea></label>`).join("");
+WS.forEach((_,i) => $("#ws-"+i).addEventListener("input", e => { state.ws[i] = e.target.value; save(state); }));
+function wsText(){ return "# 우리 회사 워크시트 (사내 자료 — 공개 금지)\n\n" + WS.map((q,i)=>`## ${i+1}. ${q}\n${state.ws[i]||""}\n`).join("\n"); }
+$("#ws-copy").addEventListener("click", () => {
+  const msg = $("#ws-msg");
+  navigator.clipboard.writeText(wsText()).then(() => { msg.textContent = "복사했습니다."; }, () => {
+    const t = document.createElement("textarea"); t.value = wsText(); document.body.appendChild(t); t.select();
+    msg.textContent = "복사가 막혀 있어 내용을 선택해 두었습니다. Ctrl+C로 복사하세요.";
+    setTimeout(() => t.remove(), 8000);
+  });
+});
+$("#ws-clear").addEventListener("click", () => { state.ws = {}; save(state); WS.forEach((_,i) => $("#ws-"+i).value = ""); $("#ws-msg").textContent = "비웠습니다."; });
+
+// ---- 진행 ------------------------------------------------------------------
+function progress(){
+  const names = {q0:"Block 0",q1:"Block 1",q2:"Block 2",q3:"Block 3"};
+  const right = Object.keys(QUIZ).filter(k => state.quiz[k] === QUIZ[k].a).length;
+  $("#progress").innerHTML = Object.keys(QUIZ).map(k => `<span class="chip ${state.quiz[k]!==undefined?"done":""}">${names[k]} 퀴즈 ${state.quiz[k]===undefined?"전":(state.quiz[k]===QUIZ[k].a?"정답":"오답")}</span>`).join("") + `<span class="chip">맞힌 문항 ${right} / 4</span>`;
+}
+progress();
+
+// ---- 탭 --------------------------------------------------------------------
+const VIEWS = ["start","ch1","ch2","ch3","dashboard","sources"];
+function show(v){
+  if (!VIEWS.includes(v)) v = "start";
+  VIEWS.forEach(x => { $("#v-"+x).hidden = x !== v; });
+  document.querySelectorAll("nav.tabs a").forEach(a => { if (a.dataset.view === v) a.setAttribute("aria-current","page"); else a.removeAttribute("aria-current"); });
+}
+document.querySelectorAll("nav.tabs a").forEach(a => a.addEventListener("click", e => { e.preventDefault(); show(a.dataset.view); window.scrollTo(0,0); }));
+show((location.hash || "").slice(1));
+</script>
+</body>
+</html>
