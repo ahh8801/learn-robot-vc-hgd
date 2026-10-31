@@ -8,5 +8,5 @@
 | 3 퀴즈 | 완료 | 2026-10-31 | 블록마다 판단형 1문항(정답 위치 2·2·3·1) + 과제 3개. lint 오류 0 · 경고 0 |
 | 4 실습 MVP | 승인 ② (2026-10-31) | 2026-10-31 | build_dashboard.py → expected.json 16개 · verify 16/16 · 렌더 콘솔 오류 0 · 모바일 390px 통과 (Edge로 렌더) |
 | 5 학습자 자료 | 완료 | 2026-10-31 | GUIDE.md. 매뉴얼 덱은 만들지 않음(선택 항목, docs/에는 교재·덱 PDF만 두라는 지시) |
-| 6 배포 | 승인 ③ 대기 | 2026-10-31 | 사용자 지시: docs/에는 교재·덱 PDF만, pptx·docx·캡처는 .gitignore |
+| 6 배포 | 완료 — 승인 ③ public (2026-10-31) | 2026-10-31 | https://github.com/ahh8801/learn-robot-vc-hgd · https://ahh8801.github.io/learn-robot-vc-hgd/ · 첫 커밋 21d945d · zip: ../learn-robot-vc-hgd.zip · 사용자 지시: docs/에는 교재·덱 PDF만, pptx·docx·캡처는 .gitignore |
 | 7 배우기·공유 | — | | |
