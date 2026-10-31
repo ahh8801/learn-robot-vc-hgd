@@ -1,0 +1,84 @@
+{
+ "values": {
+  "rows_total": {
+   "value": 23,
+   "decimals": 0,
+   "block": 0
+  },
+  "rows_confirmed": {
+   "value": 18,
+   "decimals": 0,
+   "block": 0
+  },
+  "rows_missing": {
+   "value": 2,
+   "decimals": 0,
+   "block": 0
+  },
+  "domestic_sum": {
+   "value": "6조1,695억 원",
+   "decimals": null,
+   "block": 1
+  },
+  "parts_sw_share": {
+   "value": 32.1,
+   "decimals": 1,
+   "block": 1
+  },
+  "china_share": {
+   "value": 54,
+   "decimals": 0,
+   "block": 1
+  },
+  "loc_min_part": {
+   "value": "감속기",
+   "decimals": null,
+   "block": 2
+  },
+  "loc_min": {
+   "value": 35.8,
+   "decimals": 1,
+   "block": 2
+  },
+  "loc_max_part": {
+   "value": "제어기",
+   "decimals": null,
+   "block": 2
+  },
+  "loc_max": {
+   "value": 47.9,
+   "decimals": 1,
+   "block": 2
+  },
+  "loc_over_half": {
+   "value": 0,
+   "decimals": 0,
+   "block": 2
+  },
+  "hyundai_capacity": {
+   "value": 30000,
+   "decimals": 0,
+   "block": 3
+  },
+  "hyundai_year": {
+   "value": 2028,
+   "decimals": 0,
+   "block": 3
+  },
+  "hl_target": {
+   "value": "2조3,000억 원",
+   "decimals": null,
+   "block": 3
+  },
+  "hl_share": {
+   "value": 10,
+   "decimals": 0,
+   "block": 3
+  },
+  "schaeffler_share": {
+   "value": "50% 초과",
+   "decimals": null,
+   "block": 3
+  }
+ }
+}

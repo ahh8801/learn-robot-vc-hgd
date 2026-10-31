@@ -1,0 +1,13 @@
+# 사용자 지시: docs/ 에는 교재·덱 PDF만 공개한다. 원본 편집 파일과 화면 캡처는 올리지 않는다.
+*.pptx
+*.docx
+*.png
+# 실습 중간물과 사내 자료
+env_check.txt
+outputs/
+my_worksheet.md
+# 기타
+__pycache__/
+.DS_Store
+Thumbs.db
+*.zip

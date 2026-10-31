@@ -1,0 +1,3 @@
+{"slug": "learn-robot-vc-hgd",
+ "answer": {"skill": "learn-robot-vc-hgd", "workdir": "assets/lab", "copy_to": "data",
+            "cmd": "python -I -X utf8 {answers}/build_dashboard.py", "expected": "assets/answers/expected.json"}}

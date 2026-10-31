@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>로봇 밸류체인 대시보드</title>
+<style>
+:root{--navy:#1B2C5E;--blue:#2E5BAA;--ink:#3B4252;--muted:#6B7280;--line:#D6D6DB;--gray:#F4F5F9;--bg:#FFFFFF}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",sans-serif;color:var(--ink);background:var(--bg);line-height:1.55}
+main{max-width:1080px;margin:0 auto;padding:24px 16px 48px}
+h1{color:var(--navy);font-size:1.6rem;margin:0 0 6px}
+h2{color:var(--navy);font-size:1.25rem;border-bottom:2px solid var(--navy);padding-bottom:6px;margin:36px 0 14px}
+h3{color:var(--blue);font-size:1.05rem;margin:22px 0 8px}
+.lead{background:var(--gray);border-left:5px solid var(--navy);padding:12px 14px;margin:14px 0}
+.meta,.note{color:var(--muted);font-size:.9rem}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:14px}
+.card{background:var(--gray);border-radius:8px;padding:16px;text-align:center}
+.big{color:var(--navy);font-size:1.6rem;font-weight:700}
+.cap{color:var(--muted);font-size:.88rem;margin-top:6px}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.93rem}
+th{background:var(--navy);color:#fff;text-align:left;padding:8px}
+td{border-bottom:1px solid var(--line);padding:8px;vertical-align:top;word-break:keep-all}
+tbody tr:nth-child(even){background:var(--gray)}
+.chart{margin:6px 0}
+.row{display:flex;align-items:center;gap:10px;margin:8px 0}
+.lbl{width:4.2em;text-align:right;flex:none}
+.track{position:relative;flex:1;height:30px;background:var(--gray);border-radius:4px}
+.bar{position:absolute;left:0;top:0;bottom:0;background:var(--blue);border-radius:0 4px 4px 0}
+.half{position:absolute;left:50%;top:-4px;bottom:-4px;border-left:2px dashed var(--muted)}
+.val{width:3em;font-weight:700;color:var(--navy);flex:none}
+.axis{display:flex;justify-content:space-between;margin:0 calc(3em + 10px) 0 calc(4.2em + 10px);color:var(--muted);font-size:.85rem}
+ul.src{padding-left:18px;font-size:.88rem} ul.src li{margin:4px 0;word-break:break-all}
+a{color:var(--blue)}
+</style></head>
+<body><main>
+<h1>로봇 밸류체인 — 자동차 부품사는 어느 고리에서 기회를 잡을 수 있는가</h1>
+<p class="meta">공개 자료만 사용 · 자료 기준일 2026-10-31 · 숫자 옆 [S번호]는 맨 아래 출처 목록의 번호</p>
+<p class="lead">부품 고리는 국내 로봇 매출의 32.1%다 [S4][S5]. 핵심 부품 국산화율은 모두 절반 미만이고 [S7][S8],
+먼저 들어간 자동차 부품사는 액추에이터와 비전을 골랐다 [S9][S10][S14][S15].</p>
+
+<h2>1장 로봇 밸류체인 지도</h2>
+<div class="cards"><div class="card"><div class="big">542,000대</div><div class="cap">2024년 세계 신규 설치 [S1][S6]</div></div><div class="card"><div class="big">4,664,000대</div><div class="cap">2024년 세계 가동 대수 · 전년 대비 9% 증가 [S1][S6]</div></div><div class="card"><div class="big">575,000대</div><div class="cap">2025년 신규 설치 (전망) [S1][S6]</div></div><div class="card"><div class="big">54%</div><div class="cap">2024년 설치 중 중국 비중 · 295,000대 [S1][S2]</div></div></div><div class="tw"><table><thead><tr><th>부문 (2024)</th><th>매출</th><th>출처</th></tr></thead><tbody><tr><td>제조업용 로봇</td><td>3조1,075억 원</td><td>[S4][S5]</td></tr><tr><td>서비스용 로봇</td><td>1조810억 원</td><td>[S4][S5]</td></tr><tr><td>로봇 부품·소프트웨어</td><td>1조9,810억 원 (32.1%)</td><td>[S4][S5]</td></tr><tr><td>합계</td><td>6조1,695억 원 (전년 대비 3.2% 증가)</td><td>[S4][S5][S3]</td></tr></tbody></table></div><p class="note">로봇 밀도 1,220대(제조업 종사자 1만 명당, 2024, 세계 1위) [S2][S3]</p>
+
+<h2>2장 핵심 부품과 공급 구도</h2>
+<div class="chart" role="img" aria-label="국산화율 감속기 35.8 모터 38.8 센서 42.5 제어기 47.9"><div class="row"><span class="lbl">감속기</span><span class="track"><span class="bar" style="width:35.8%"></span><span class="half"></span></span><span class="val">35.8</span></div><div class="row"><span class="lbl">모터</span><span class="track"><span class="bar" style="width:38.8%"></span><span class="half"></span></span><span class="val">38.8</span></div><div class="row"><span class="lbl">센서</span><span class="track"><span class="bar" style="width:42.5%"></span><span class="half"></span></span><span class="val">42.5</span></div><div class="row"><span class="lbl">제어기</span><span class="track"><span class="bar" style="width:47.9%"></span><span class="half"></span></span><span class="val">47.9</span></div><div class="axis"><span>0</span><span>50</span><span>100</span></div></div><p class="note">단위 %, 2022년 기준 [S7][S8] · 점선 = 절반(50%)</p><div class="tw"><table><thead><tr><th>무엇을 보나</th><th>값</th><th>표기</th></tr></thead><tbody><tr><td>휴머노이드 원가 중 액추에이터</td><td>40~60%</td><td>보도 기준 추정 [S9][S10]</td></tr><tr><td>산업용 로봇 부품별 원가 비중</td><td>미확보</td><td>공개 원자료 없음 — 추정해서 채우지 않음</td></tr><tr><td>감속기 업체별 세계 점유율</td><td>미확보</td><td>공개 원자료 없음 — 추정해서 채우지 않음</td></tr></tbody></table></div>
+
+<h2>3장 자동차 부품사의 진입 기회</h2>
+<div class="cards two"><div class="card"><div class="big">연 30,000대</div><div class="cap">현대차그룹 미국 로봇 공장 생산능력 [S9][S13]</div></div><div class="card"><div class="big">2028년</div><div class="cap">가동 목표 [S9][S13]</div></div></div><h3>먼저 들어간 회사들</h3><div class="tw"><table><thead><tr><th>회사</th><th>들어간 고리</th><th>내용</th><th>숫자</th><th>출처</th></tr></thead><tbody><tr><td>현대모비스</td><td>부품 · 액추에이터</td><td>2025년 8월 CEO 인베스터 데이에서 휴머노이드 관절(액추에이터) 사업 계획 공개. 액추에이터가 전자식 조향 장치와 구성이 비슷하다고 소개됨</td><td>회사 목표 숫자는 공개되지 않음</td><td>[S9][S10]</td></tr><tr><td>HL만도</td><td>부품 · 액추에이터</td><td>2025년 12월 CEO Investor Day에서 휴머노이드 액추에이터 목표 발표</td><td>2035년 매출 2조3,000억 원, 점유율 10% (회사 목표)</td><td>[S10][S12]</td></tr><tr><td>LG이노텍</td><td>부품 · 센서·비전</td><td>보스턴다이내믹스와 로봇의 &#x27;눈&#x27;인 비전 센싱 시스템(카메라·3D 센싱 모듈) 공동 개발 협약</td><td>—</td><td>[S15]</td></tr><tr><td>Schaeffler(독일)</td><td>부품 · 액추에이터 + 수요처</td><td>휴머노이드 회사 Humanoid의 관절 액추에이터 우선 공급사가 되고, 그 로봇을 자기 공장에 들여옴</td><td>관절 액추에이터 수요의 50% 초과 공급, 2031년까지 (회사 발표)</td><td>[S14]</td></tr></tbody></table></div><p class="note">HL만도 숫자는 회사 목표, Schaeffler 숫자는 회사 발표 기준(다른 출처로 확인하지 못함).</p><h3>역량 매칭표</h3><div class="tw"><table><thead><tr><th>자동차 부품사가 가진 것</th><th>로봇 밸류체인에서 쓰이는 곳</th><th>고리</th></tr></thead><tbody><tr><td>정밀 기어 가공, 열처리</td><td>감속기</td><td>① 부품</td></tr><tr><td>전동 조향·제동용 모터와 구동 회로</td><td>서보모터, 액추에이터</td><td>① 부품</td></tr><tr><td>차량 카메라, 레이더, 토크 센서</td><td>센서·비전</td><td>① 부품</td></tr><tr><td>차량 제어기(ECU)와 제어 소프트웨어</td><td>관절 제어기</td><td>① 부품</td></tr><tr><td>양산 품질 체계, 원가 관리</td><td>모든 부품의 대량 공급</td><td>① 부품</td></tr><tr><td>자동화 라인 운영 경험</td><td>로봇 도입 컨설팅, 유지보수</td><td>③ 도입·운영</td></tr></tbody></table></div>
+
+<h2>출처</h2>
+<ul class="src"><li><b>S1</b> Global Robot Demand in Factories Doubles Over 10 Years (World Robotics 2025 – Industrial Robots) · 국제로봇연맹(IFR) · 2025-09-25 · <a href="https://ifr.org/ifr-press-releases/news/global-robot-demand-in-factories-doubles-over-10-years">https://ifr.org/ifr-press-releases/news/global-robot-demand-in-factories-doubles-over-10-years</a></li><li><b>S2</b> Roboterdichte steigt in Europa, Asien und Amerika (로봇 밀도 보도자료, 독일어) · 국제로봇연맹(IFR) · 2026-04-08 · <a href="https://ifr.org/downloads/press_docs/DE-2026-APRIL-_8-IFR_PRESSMELDUNG_Roboterdichte-deutsch.pdf">https://ifr.org/downloads/press_docs/DE-2026-APRIL-_8-IFR_PRESSMELDUNG_Roboterdichte-deutsch.pdf</a></li><li><b>S3</b> 로봇 산업 소개 (출처 표기: 한국로봇산업협회 2024년 기준 실태조사, IFR World Robotics 2025) · KOTRA Invest KOREA · 미표기 (WR2025 인용으로 2025-09 이후로 추정) · <a href="https://www.investkorea.org/ik-kr/cntnts/i-3021/web.do">https://www.investkorea.org/ik-kr/cntnts/i-3021/web.do</a></li><li><b>S4</b> 국내 로봇시장 6조1695억원…전년比 3.2% 성장 · 지디넷코리아 (산업통상부·한국로봇산업진흥원·한국AI로봇산업협회 실태조사 인용) · 2025-12-29 · <a href="https://zdnet.co.kr/view/?no=20251229084702">https://zdnet.co.kr/view/?no=20251229084702</a></li><li><b>S5</b> [Cover Story] &#x27;2024년 국내 로봇산업 실태 조사 결과 보고서&#x27; 요약 · 로봇신문 · 2026-01-25 · <a href="https://www.irobotnews.com/news/articleView.html?idxno=44544">https://www.irobotnews.com/news/articleView.html?idxno=44544</a></li><li><b>S6</b> IFR: Industrial robot deployments have doubled in 10 years · The Robot Report · 2025-09-25 · <a href="https://www.therobotreport.com/ifr-industrial-robot-deployments-have-doubled-in-10-years/">https://www.therobotreport.com/ifr-industrial-robot-deployments-have-doubled-in-10-years/</a></li><li><b>S7</b> 2035년 &#x27;경차값 휴머노이드&#x27; 나온다…핵심부품 국산화 서둘러야 · 머니투데이 (국산화율은 정부 자료 인용) · 2025-01-01 · <a href="https://www.mt.co.kr/tech/2025/01/01/2024120513043058658">https://www.mt.co.kr/tech/2025/01/01/2024120513043058658</a></li><li><b>S8</b> [그래픽뉴스] &#x27;로봇 밀도 1위&#x27; 한국, 핵심 부품 내재화는 여전히 과제 · 산업일보 (국회미래연구원 토론 자료 인용) · 2025-10-16 · <a href="https://kidd.co.kr/news/243514">https://kidd.co.kr/news/243514</a></li><li><b>S9</b> 현대모비스 &#x27;휴머노이드 관절&#x27; 만든다 · 한국경제 · 2025-08-27 · <a href="https://www.hankyung.com/article/2025082758141">https://www.hankyung.com/article/2025082758141</a></li><li><b>S10</b> 현대모비스·HL만도, 車부품 넘어 로봇 기업으로 변신 가속 · 아이뉴스24 · 2025-12-17 · <a href="https://v.daum.net/v/20251217075605855">https://v.daum.net/v/20251217075605855</a></li><li><b>S11</b> Robotics – Industries (회사 소개 페이지) · Nabtesco · 미표기 · <a href="https://www.nabtesco.de/en/industries/robotics">https://www.nabtesco.de/en/industries/robotics</a></li><li><b>S12</b> KB증권 &quot;HL만도, 폭발적 휴머노이드 엑추에이터 수요 확인...목표가 86%↑&quot; · 파이낸셜뉴스 (KB증권 리포트 인용) · 2026-01-14 · <a href="https://www.fnnews.com/news/202601140900491769">https://www.fnnews.com/news/202601140900491769</a></li><li><b>S13</b> Hyundai Motor to launch world&#x27;s first large-scale robot factory in 2028 · 헤럴드경제 (The Herald Business) · 2026-08-26 · <a href="https://mbiz.heraldcorp.com/article/10853081">https://mbiz.heraldcorp.com/article/10853081</a></li><li><b>S14</b> Humanoid Secures Landmark Deal with Schaeffler to Deploy Thousands of Humanoid Robots · Humanoid (회사 보도자료) · 2026-05-13 · <a href="https://thehumanoid.ai/humanoid-secures-landmark-deal-with-schaeffler-to-deploy-thousands-of-humanoid-robots/">https://thehumanoid.ai/humanoid-secures-landmark-deal-with-schaeffler-to-deploy-thousands-of-humanoid-robots/</a></li><li><b>S15</b> LG이노텍, 휴머노이드 &#x27;눈&#x27; 만든다 · 한국경제 · 2025-05-12 · <a href="https://www.hankyung.com/article/202505127097i">https://www.hankyung.com/article/202505127097i</a></li></ul>
+<p class="note">미확보 항목은 지어내지 않고 비워 두었다. 우리 회사 워크시트는 사내 자료라 이 페이지에 넣지 않는다.</p>
+</main></body></html>
